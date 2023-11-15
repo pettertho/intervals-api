@@ -17,7 +17,6 @@ type Interval struct {
 }
 
 func handleAPI(w http.ResponseWriter, r *http.Request) {
-	log.Println("Received an API request")
 	var request struct {
 		Includes []Interval `json:"includes"`
 		Excludes []Interval `json:"excludes"`
@@ -28,9 +27,6 @@ func handleAPI(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	log.Info(request)
-	log.Info(request.Includes)
-	log.Info(request.Excludes)
 	output := processIntervals(request.Includes, request.Excludes)
 
 	response := struct {
@@ -39,12 +35,15 @@ func handleAPI(w http.ResponseWriter, r *http.Request) {
 		Output: output,
 	}
 
+	log.Println("Received an API request")
+	log.Info(request)
+	log.Info(response)
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
 func mergeIntervals(intervals []Interval) []Interval {
-	log.Println("Merging intervals")
 	merged := []Interval{}
 
 	sort.Slice(intervals, func(i, j int) bool {
