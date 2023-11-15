@@ -35,9 +35,9 @@ func handleAPI(w http.ResponseWriter, r *http.Request) {
 		Output: output,
 	}
 
-	log.Println("Received an API request")
-	log.Info(request)
-	log.Info(response)
+	log.Info("Received an API request")
+	log.Infof("Request: %+v", request)
+	log.Infof("Response: %+v", response)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
