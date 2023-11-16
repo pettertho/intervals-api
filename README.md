@@ -1,5 +1,14 @@
 # intervals-api
 
+Small application that accepts a collection of include and exclude intervals, and calculates the resulting intervals.
+
+Example:
+Includes: 10-100
+Excludes: 20-30
+Output should be: 10-19, 31-100
+
+The complexity of the algorithm is O(n log n), where n is the total number of intervals.
+
 ## Getting started
 
 ### Initialize the project
