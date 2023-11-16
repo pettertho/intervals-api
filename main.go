@@ -44,19 +44,25 @@ func handleAPI(w http.ResponseWriter, r *http.Request) {
 }
 
 func mergeIntervals(intervals []Interval) []Interval {
+	// Initialize an empty slice to store the merged intervals
 	merged := []Interval{}
 
+	// Sort the intervals based on the start time
 	sort.Slice(intervals, func(i, j int) bool {
 		return intervals[i].Start < intervals[j].Start
 	})
 
+	// Iterate over the sorted intervals
 	for _, interval := range intervals {
+		// If the merged slice is empty or if the current interval does not overlap with the previous, append it to merged
 		if len(merged) == 0 || merged[len(merged)-1].End < interval.Start {
 			merged = append(merged, interval)
 		} else {
+			// Otherwise, there is an overlap, so we merge the current and previous intervals.
 			merged[len(merged)-1].End = max(merged[len(merged)-1].End, interval.End)
 		}
 	}
+	// Return the merged intervals
 	return merged
 }
 
@@ -117,9 +123,6 @@ func main() {
 
 	// API endpoint
 	router.HandleFunc("/api/process", handleAPI).Methods("POST")
-
-	// Serve static files for potential frontend (if any)
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	// Start the server
 	fmt.Println("Server is running on port 8080...")
